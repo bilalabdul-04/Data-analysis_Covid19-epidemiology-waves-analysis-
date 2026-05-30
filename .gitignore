@@ -1,0 +1,26 @@
+# Python local environment caches and checkpoints
+__pycache__/
+*.py[cod]
+*$py.class
+.ipynb_checkpoints/
+.virtualenv/
+venv/
+ENV/
+
+# Large files and installers
+*.exe
+*.msix
+*.zip
+
+# Redundant temporary folders
+extracted/
+__MACOSX/
+
+# Local configuration files
+.vscode/
+.idea/
+.DS_Store
+
+# Course assignment descriptions and redundant raw datasets
+DV1597_Assignment_2.pdf
+Assignment 2_datasets/
