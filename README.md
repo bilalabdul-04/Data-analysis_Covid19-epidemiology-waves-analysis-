@@ -33,7 +33,7 @@ Utilizing public health datasets curated by the **European Centre for Disease Pr
 
 ## 📁 Repository Architecture
 ```
-Assigment 2/
+covid19-epidemiology-portfolio/
 ├── .gitignore                  # Keeps the repo clean of installers and local caches
 ├── README.md                   # Portfolio overview & instructions
 ├── requirements.txt            # PIP dependencies
