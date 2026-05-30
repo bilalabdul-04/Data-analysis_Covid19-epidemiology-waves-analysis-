@@ -93,7 +93,7 @@ df_hosp = df_hosp[df_hosp['geoId'].notna()]
 # ----------------- SECTION 3.1: MANDATORY QUESTIONS -----------------
 
 def run_q1():
-    print("\n--- Solving Q1: Top 10 Countries and Quarterly Waves ---")
+    print("\n[1/8] Quarterly infection wave analysis...")
     # Identify top 10 countries overall (2020-2022) by total cases
     country_totals = df_cases.groupby('countriesAndTerritories')['cases'].sum()
     top_10_countries = country_totals.nlargest(10).index.tolist()
@@ -149,7 +149,7 @@ def run_q1():
 
 
 def run_q2():
-    print("\n--- Solving Q2: Spatial Bubble Map of Cases and Deaths ---")
+    print("\n[2/8] Generating spatio-temporal distribution maps...")
     # We will generate static high-end coordinate bubble plots (replaces interactive maps for the LaTeX report)
     # Group by country and year
     df_cases['year_str'] = df_cases['date'].dt.year.astype(str)
@@ -230,7 +230,7 @@ def run_q2():
 
 
 def run_q3():
-    print("\n--- Solving Q3: Top 3 Vaccine Brands and Popularity Exceptions ---")
+    print("\n[3/8] Analyzing vaccine brand portfolios across EU/EEA...")
     # Identify popular vaccine brands by summing FirstDose + SecondDose + DoseAdditional1 + DoseAdditional2
     dose_cols = [c for c in df_vacc_nat.columns if 'Dose' in c and c != 'FirstDoseRefused' and c != 'UnknownDose']
     df_vacc_nat['Total_Doses_Administered'] = df_vacc_nat[dose_cols].sum(axis=1)
@@ -297,7 +297,7 @@ def run_q3():
 
 
 def run_q4(top_3_overall):
-    print("\n--- Solving Q4: Target Groups for Top 3 Vaccine Brands ---")
+    print("\n[4/8] Analyzing demographic vaccine distribution...")
     # Exclude aggregate target groups to focus on specific age groups and key demographic cohorts (HCW, LTCF)
     agg_groups = ['ALL', '1_Age60+', '1_Age<60', 'AgeUNK']
     specific_vacc_df = df_vacc_nat[~df_vacc_nat['TargetGroup'].isin(agg_groups)].copy()
@@ -341,7 +341,7 @@ def run_q4(top_3_overall):
 
 
 def run_q5():
-    print("\n--- Solving Q5: Vaccine Skepticism and Hospitalization Burden ---")
+    print("\n[5/8] Computing vaccine skepticism vs. clinical burden correlation...")
     # 1. Calculate national-level first-dose rate (Skepticism = 1 - FirstDose_Rate)
     results = []
     for country in df_vacc_nat['ReportingCountry'].unique():
@@ -421,7 +421,7 @@ def run_q5():
 
 
 def run_q6():
-    print("\n--- Solving Q6: Under-18 First-Dose Vaccination Ranks ---")
+    print("\n[6/8] Ranking under-18 vaccination rates by country...")
     results = []
     for country in df_vacc_nat['ReportingCountry'].unique():
         sub = df_vacc_nat[df_vacc_nat['ReportingCountry'] == country]
@@ -485,7 +485,7 @@ def run_q6():
 
 
 def run_q7():
-    print("\n--- Solving Q7: Oldest Second-Dose Vaccinated Population ---")
+    print("\n[7/8] Computing weighted average age of second-dose recipients...")
     # Define Midpoint ages for age cohorts
     age_midpoints = {
         'Age0_4': 2.5, 'Age5_9': 7.0, 'Age10_14': 12.0, 'Age15_17': 16.0,
@@ -579,7 +579,7 @@ def run_q7():
 
 
 def run_q8():
-    print("\n--- Solving Q8: Healthcare Burden Comparison (2020 vs 2022) ---")
+    print("\n[8/8] Comparing healthcare burden between 2020 and 2022 waves...")
     # Clean indicator and dates
     df_hosp['date_dt'] = pd.to_datetime(df_hosp['date'])
     df_hosp['year_str'] = df_hosp['date_dt'].dt.year.astype(str)
@@ -648,7 +648,7 @@ def run_q8():
 # ----------------- SECTION 3.2: ADVANCED QUESTIONS FOR GRADES A & B -----------------
 
 def run_advanced_a():
-    print("\n--- Solving Advanced Q1 (Question A): Lagged Vaccination vs. CFR ---")
+    print("\n[Advanced A] Time-lagged vaccination vs. case fatality rate analysis...")
     # We will study Germany (DE) as it has consistent case, death, and vaccination reporting
     de_cases = df_cases[df_cases['geoId'] == 'DE'].sort_values(by='date').copy()
     de_vacc = df_vacc_nat[(df_vacc_nat['ReportingCountry'] == 'DE') & (df_vacc_nat['TargetGroup'] == 'ALL')].copy()
@@ -730,7 +730,7 @@ def run_advanced_a():
 
 
 def run_advanced_b():
-    print("\n--- Solving Advanced Q2 (Question B): Clinical Severity Transitions ---")
+    print("\n[Advanced B] Clinical severity transition analysis (Wilcoxon test)...")
     # Severity ratio = Daily ICU Occupancy / Daily Hospital Occupancy
     df_icu = df_hosp[df_hosp['indicator'] == 'Daily ICU occupancy'][['geoId', 'date', 'value']].rename(columns={'value': 'icu'})
     df_h = df_hosp[df_hosp['indicator'] == 'Daily hospital occupancy'][['geoId', 'date', 'value']].rename(columns={'value': 'hosp'})
@@ -789,7 +789,7 @@ def run_advanced_b():
 
 
 def run_advanced_c():
-    print("\n--- Solving Advanced Q3 (Question C): Geopolitical Vaccine Portfolios ---")
+    print("\n[Advanced C] PCA and K-Means clustering of vaccine portfolios...")
     # Brand portfolio proportions at national level (using ALL groups)
     country_brand_agg = df_vacc_nat[df_vacc_nat['TargetGroup'] == 'ALL'].groupby(['ReportingCountry', 'Vaccine'])['Total_Doses_Administered'].sum().unstack(fill_value=0)
     
@@ -877,9 +877,7 @@ def run_advanced_c():
 
 # ----------------- MAIN EXECUTION LOOP -----------------
 if __name__ == "__main__":
-    print("\n" + "="*40)
-    print("   RUNNING ECDC COVID-19 EDA BACKEND   ")
-    print("="*40)
+    print("Running COVID-19 epidemiology analysis pipeline...")
     
     run_q1()
     run_q2()
@@ -894,6 +892,4 @@ if __name__ == "__main__":
     run_advanced_b()
     run_advanced_c()
     
-    print("\n" + "="*40)
-    print("      BACKEND ANALYSIS COMPLETED       ")
-    print("="*40)
+    print("\nAnalysis complete. All outputs saved to the plots/ directory.")
