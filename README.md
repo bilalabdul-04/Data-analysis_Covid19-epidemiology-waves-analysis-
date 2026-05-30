@@ -38,7 +38,6 @@ covid19-epidemiology-portfolio/
 ├── README.md                           # Project documentation
 ├── requirements.txt                    # Python dependencies
 ├── run_analysis.py                     # Main data analysis and processing pipeline
-├── generate_slides.py                  # PowerPoint presentation generation script
 ├── COVID19_Analysis_Pipeline.ipynb     # Interactive Jupyter Notebook with complete analysis
 ├── COVID19_Epidemiology_Report.pdf     # Pre-compiled academic research paper (LNCS format)
 ├── COVID19_Epidemiology_Presentation.pptx # Verified professional presentation slides
